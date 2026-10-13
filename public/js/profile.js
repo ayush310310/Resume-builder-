@@ -1,0 +1,3 @@
+async function init(){const r=await fetch("/api/profile");if(r.status===401)return location.href="/login.html";const d=await r.json();for(const [k,v] of Object.entries(d)){const e=document.querySelector(`[name="${k}"]`);if(e)e.value=v||""}}
+document.getElementById("profileForm").onsubmit=async e=>{e.preventDefault();const d=Object.fromEntries(new FormData(e.target));const r=await fetch("/api/profile",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)});const j=await r.json();const m=document.getElementById("msg");m.className=r.ok?"msg-success":"msg-error";m.textContent=j.message||j.error};
+document.getElementById("logout").onclick=async()=>{await fetch("/api/auth/logout",{method:"POST"});location.href="/"};init();

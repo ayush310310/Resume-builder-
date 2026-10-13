@@ -1,0 +1,4 @@
+async function get(url){const r=await fetch(url);if(!r.ok)throw Error("Session expired");return r.json()}
+async function load(){try{const {user}=await get("/api/auth/me");document.getElementById("userName").textContent=user.full_name;document.getElementById("welcome").textContent=`Hello, ${user.full_name.split(" ")[0]}`;const [p,e,s,pr,x]=await Promise.all(["profile","education","skills","projects","experience"].map(a=>get("/api/"+a)));let done=0;if(p.phone||p.location||p.professional_summary)done++;if(e.length)done++;if(s.length)done++;if(pr.length)done++;if(x.length)done++;const pct=Math.round(done/5*100);document.getElementById("percent").textContent=pct+"%";document.getElementById("bar").style.width=pct+"%"}catch(e){location.href="/login.html"}}
+document.getElementById("logout").onclick=async()=>{await fetch("/api/auth/logout",{method:"POST"});location.href="/"};
+load();
